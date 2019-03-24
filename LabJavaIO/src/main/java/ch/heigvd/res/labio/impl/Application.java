@@ -156,5 +156,4 @@ public class Application implements IApplication {
     IFileExplorer explorer = new DFSFileExplorer();
     explorer.explore(new File(WORKSPACE_DIRECTORY), new CompleteFileTransformer());
   }
-
 }
