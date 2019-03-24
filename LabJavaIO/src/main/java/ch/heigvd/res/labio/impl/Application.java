@@ -5,29 +5,28 @@ import ch.heigvd.res.labio.impl.transformers.CompleteFileTransformer;
 import ch.heigvd.res.labio.interfaces.IApplication;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
+import ch.heigvd.res.labio.quotes.QuoteClient;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
 
 /**
- *
  * @author Olivier Liechti
  */
 public class Application implements IApplication {
 
+  private static final Logger LOG = Logger.getLogger(Application.class.getName());
   /**
    * This constant defines where the quotes will be stored. The path is relative
    * to where the Java application is invoked.
    */
   public static String WORKSPACE_DIRECTORY = "./workspace/quotes";
-
-  private static final Logger LOG = Logger.getLogger(Application.class.getName());
 
   public static void main(String[] args) {
 
@@ -105,15 +104,15 @@ public class Application implements IApplication {
   /**
    * This method stores the content of a quote in the local file system. It has
    * 2 responsibilities:
-   *
+   * <p>
    * - with quote.getTags(), it gets a list of tags and uses
-   *   it to create sub-folders (for instance, if a quote has three tags "A", "B" and
-   *   "C", it will be stored in /quotes/A/B/C/quotes-n.utf8.
-   *
+   * it to create sub-folders (for instance, if a quote has three tags "A", "B" and
+   * "C", it will be stored in /quotes/A/B/C/quotes-n.utf8.
+   * <p>
    * - with quote.getQuote(), it has access to the text of the quote. It stores
-   *   this text in UTF-8 file.
+   * this text in UTF-8 file.
    *
-   * @param quote the quote object, with tags and text
+   * @param quote    the quote object, with tags and text
    * @param filename the name of the file to create and where to store the quote text
    * @throws IOException
    */

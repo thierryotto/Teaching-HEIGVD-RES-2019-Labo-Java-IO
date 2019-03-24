@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * When filter encounters a line separator, it sends it to the decorated writer.
  * It then sends the line number and a tab character, before resuming the write
  * process.
- *
+ * <p>
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
  * @author Olivier Liechti
@@ -22,9 +22,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
   private int nbLine = 1;
   private boolean newLine = true;
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-  }
+  public FileNumberingFilterWriter(Writer out) { super(out); }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
@@ -43,22 +41,24 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
     // New line
     if (c == '\n') {
+      newLine = false;
       super.write(c);
       writeLineNbr();
-      newLine = false;
 
     } else if (c == '\r') { // Carriage return
       newLine = true;
       super.write(c);
 
     } else { // Not an escape char
+
       if (newLine) {
-        writeLineNbr();
         newLine = false;
+        writeLineNbr();
       }
 
       super.write(c);
     }
+
   }
 
   private void writeLineNbr() throws IOException {
@@ -67,5 +67,4 @@ public class FileNumberingFilterWriter extends FilterWriter {
     super.write(Integer.toString(nbLine++), 0, len);
     super.write('\t');
   }
-
 }
