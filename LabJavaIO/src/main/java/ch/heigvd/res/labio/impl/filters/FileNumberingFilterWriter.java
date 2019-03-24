@@ -19,23 +19,53 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
+  private int nbLine = 1;
+  private boolean newLine = true;
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for (int index = off; index < (off + len); index++)
+      this.write(str.charAt(index));
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for (int index = off; index < (off + len); index++)
+      this.write(cbuf[index]);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    // New line
+    if (c == '\n') {
+      super.write(c);
+      writeLineNbr();
+      newLine = false;
+
+    } else if (c == '\r') { // Carriage return
+      newLine = true;
+      super.write(c);
+
+    } else { // Not an escape char
+      if (newLine) {
+        writeLineNbr();
+        newLine = false;
+      }
+
+      super.write(c);
+    }
+  }
+
+  private void writeLineNbr() throws IOException {
+
+    int len = String.valueOf(nbLine).length();
+    super.write(Integer.toString(nbLine++), 0, len);
+    super.write('\t');
   }
 
 }
